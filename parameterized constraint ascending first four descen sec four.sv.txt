@@ -1,0 +1,51 @@
+// Code your testbench here
+// or browse Examples
+class array_gen #(parameter N=8);
+  rand int arr[];
+  function new();
+    arr=new[N];
+  endfunction
+  constraint c_range{foreach(arr[i])
+    arr[i] inside{[1:100]};}
+  constraint c_first{foreach(arr[i])
+    if(i>0 && i<N/2)
+      arr[i]>arr[i-1];}
+                     constraint c_second{foreach(arr[i])
+                       if( i>N/2)
+                         arr[i]<arr[i-1];}
+                                         function void verify();
+                                           bit flag=1;
+                                           for(int i=1;i<N/2;i++)
+                                             if(arr[i]<=arr[i-1])
+                                                flag=0;
+                                                for(int i=N/2+1;i<N;i++)
+                                                  if(arr[i]<=arr[i-1])
+                                                     flag=0;
+                                                    if(flag)                                               $display("verification successful");
+else                                                    $display("verification fail");
+                                         endfunction                                    
+                                                     
+                                                     endclass
+                                                     
+                                                     module tb;
+                                                       array_gen #(8)obj;
+                                                       initial
+                                                         begin
+                                                           obj=new();
+                                                           if(obj.randomize())begin
+                                                             $display("generated array:");
+                                                             foreach(obj.arr[i])
+                                                               $write("%0d ",obj.arr[i]);
+                                                          
+                                                           $display(" ");
+                                                           obj.verify();
+                                                             end
+                                                           else
+                                                             $display("verification fails");
+                                                         end
+                                                     endmodule
+                                                        
+                                                             
+                                                     
+                                                     
+                                                     
