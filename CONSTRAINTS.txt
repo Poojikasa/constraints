@@ -1,0 +1,771 @@
+//CONSTRAINTS
+
+//WIRTE A CODE TO GENERATE 10 RANDOM NUMBERS
+
+
+
+
+//--------------------1010101010---------------------------//
+
+/*
+class example;
+
+rand bit arr[];
+constraint c1{arr.size == 10;}
+constraint c2{foreach(arr[i])
+		{
+		if(i%2 == 0)
+			arr[i] == 1;
+		else
+			arr[i] == 0;}}
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule
+*/
+
+//--------------------------001100110011----------------------//
+/*
+class example;
+
+rand bit arr[];
+constraint c1{arr.size == 10;}
+constraint c2{foreach(arr[i])
+		{
+		if((i % 4 == 0) || (i % 4 == 1))
+			arr[i] == 0;
+		else
+			arr[i] == 1;}}
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule
+*/
+
+//-----------------------------0001110001110001------------------------------//
+/*
+class example;
+
+rand bit arr[];
+constraint c1{arr.size == 10;}
+constraint c2{foreach(arr[i])
+		{
+		if((i % 6 == 0) || (i % 6 == 1) || (i % 6 == 2))
+			arr[i] == 0;
+		else
+			arr[i] == 1;}}
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule
+*/
+
+//---------------------------01020304050----------------------------------------//
+/*
+class example;
+
+rand bit [4:0] arr[];
+constraint c1{arr.size == 10;}
+constraint c2{foreach(arr[i])
+		{
+		if(i%2 == 0)
+			arr[i] == 0;
+		else
+			arr[i] == (i+1)/2;}}
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule
+*/
+
+//------------------------02040608010----------------------------------//
+/*
+class example;
+
+rand bit [4:0] arr[];
+constraint c1{arr.size == 10;}
+constraint c2{foreach(arr[i])
+		{
+		if(i%2 == 0)
+			arr[i] == 0;
+		else
+			arr[i] == (i+1);}}
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule
+*/
+
+//----------------------------- -5,10,-15,20,-25,30 --------------------------------------//
+/*
+class example;
+
+rand int arr[10];
+//constraint c1{arr.size == 12;}
+constraint c2{foreach(arr[i])
+		{
+		if(i%2 == 0)
+			arr[i] == (-5) * (i+1);
+		else
+			arr[i] == (i+1) * 5;}}
+
+endclass
+
+//module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule
+*/
+//-----------------------------9,19,29,39,49,59,69,79--------------------------------------//
+
+/*class example;
+
+rand bit [10:0] arr[10];
+//constraint c1{arr.size == 10;}
+constraint c2{foreach(arr[i])
+			arr[i] == (i*10) + 9;
+		}
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule
+*/
+
+//-----------------------------1122334455-------------------------------------//
+
+/*class example;
+
+rand bit [4:0] arr[10];
+//constraint c1{arr.size == 10;}
+constraint c2{foreach(arr[i])
+			arr[i] == (i/2) + 1;
+			}
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule */
+
+//-----------------------------12211221122112-------------------------------------//
+
+/*class example;
+
+rand bit [4:0] arr[10];
+constraint c2{foreach(arr[i])
+			{
+			if(( i % 4 == 0) || (i % 4 == 3))
+				arr[i] == 1;
+			else 
+				arr[i] == 2;
+			}}
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+end
+endmodule */
+
+//-----------------------------1.35 to 2.57-------------------------------------//
+
+/*class example;
+
+rand int data;
+real num;
+constraint c2{data inside {[135 : 257]};}
+
+function void post_randomize();
+	num = data/100.0;
+	$display("%0f",num);
+endfunction
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	repeat(10)
+	begin
+		ex.randomize();
+	end
+end
+endmodule */
+
+//-----------------------------even numbers between 50 to 100------------------------------------//
+
+/*class example;
+
+rand int data[];
+
+constraint c1{data.size == 20;}
+constraint c2{foreach(data[i])
+		{
+		data[i] inside {[50:100]};
+		data[i] % 2 == 0;
+		}}
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+	$display("%p", ex);
+
+end
+endmodule 
+*/
+//-----------------------------even and odd numbers between 20 to 100------------------------------------//
+/*
+class example;
+
+rand int even[];
+rand int odd[];
+
+constraint c1{even.size == 20;
+		odd.size == 20;}
+constraint c2{foreach (even[i])
+		even[i] inside {[20:100]};
+	      foreach (odd[i])
+		odd[i] inside {[20:100]};
+		}
+		
+constraint c3{foreach (even[i])
+		even[i] % 2 == 0;
+	      foreach (odd[i])
+		odd[i] % 2 == 1;
+		}
+function void post_randomize();
+	$display("%0p",even);
+	$display("%0p",odd);
+endfunction
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+//  $display("even = %0p,odd = %0p", ex.even,ex.odd);
+end
+endmodule 
+*/
+
+//-----------------------------odd numbers at even location and even numbers at odd location------------------------------------//
+
+/*class example;
+
+rand bit [3:0] data[];
+
+constraint c1{data.size == 20;}
+constraint c2{foreach(data[i])
+		{
+		if(i % 2 == 0)
+			data[i] % 2 == 1;
+		else	
+			data[i] % 2 == 0;
+		}}
+function void post_randomize();
+	foreach(data[i])	
+		$display("%0d,%0p",i,data[i]);
+endfunction
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+
+end
+endmodule 
+*/
+
+//----------------------------32 bit rand variable that it should have 16 number of 1's non-consecutively---------------------//
+
+/*class example;
+
+rand bit [31:0] data;
+
+constraint c1{$countones(data) == 16;}
+constraint c2{foreach(data[i])
+		{
+		if(i > 0 && data[i] == 1)
+			data[i] != data[i-1];
+		}}
+function void post_randomize();	
+	$display("%0b",data);
+endfunction
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+end
+endmodule 
+*/
+
+//---------------------------------factorial of first 10 numbers------------------------------//
+/*
+class example;
+
+rand bit [31:0] data[];
+
+constraint c1{data.size == 10;}
+
+function int fact(int i);
+	if(i <= 1)
+		fact = 1;
+	else 
+		fact = i * fact(i-1);
+endfunction
+
+constraint c2{foreach(data[j])
+		data[j] == fact(j);}
+
+function void post_randomize();
+	foreach(data[k])	
+	$display("%0d,%0d",k,data[k]);
+endfunction
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+
+end
+endmodule 
+*/
+
+//---------------------------------factorial of first 5 even numbers------------------------------//
+
+/*class example;
+
+rand bit [31:0] data[];
+
+constraint c1{data.size == 5;}
+
+function int fact(int i);
+	if(i <= 1)
+		fact = 1;
+	else 
+		fact = i * fact(i-1);
+endfunction
+
+constraint c2{foreach(data[j])
+		data[j] == fact(j * 2);}
+
+function void post_randomize();
+	foreach(data[k])	
+	$display("%0d,%0d",k*2 ,data[k]);
+endfunction
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+
+end
+endmodule 
+*/
+
+//-----------------------randomize a 32 bit variable in which only the 20th index should be randomised and others should be 0------------------------------//
+
+/*class example;
+
+rand bit[31:0] data;
+//constraint c1{$countones(data) == 2;}
+
+constraint c1{foreach(data[i])
+		if(i != 20)
+			data[i] inside {0,1};
+		else
+			data[i] == 0;}
+
+function void post_randomize();	
+	$display("%0b",data);
+endfunction
+
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+
+end
+endmodule */
+
+//---------------------------sum of any 3 consecutive elements in an array should be even------------------------------------------//
+
+/*class example;
+rand bit [31:0] data[];
+
+constraint c1{data.size == 10;}
+constraint c2{foreach(data[i])
+		{
+		 data[i] inside {[50:100]};}}
+
+constraint c3{foreach(data[i])
+		{
+			if(i > 1)
+				(data[i] + data[i-1] + data[i-2]) % 2 == 0;}}
+
+function void post_randomize();
+	foreach(data[i])
+		$display("%0d,%0d", i,data[i]);
+endfunction
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+end
+endmodule 
+*/
+
+//------------------------------16 bit num to generate alternate pairs of 0's and 1's ---------------------------------------//
+
+class example;
+rand bit [15:0] data;
+
+constraint c1{foreach(data[i])
+	if(i < 15)
+		if(i % 2 == 0)
+			data[i+1] == data[i];
+		else
+			data[i] != data[i+1];}
+
+function void post_randomize();
+		$display("%0b",data);
+endfunction
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new();
+	ex.randomize();
+
+end
+endmodule 
+
+
+//----------------------------------prime numbers between the range of 1 to 100-----------------------------------------------//
+
+/*
+class example;
+rand bit [15:0] data[];
+//bit count = 0;
+constraint c1{foreach(data[i])
+              data[i] inside {[0:100]};}
+constraint c2{foreach(data[i])
+		if(i > 1)
+			data[i] == prime(i);
+		else
+			data[i] == 2 ;}
+
+function int prime(int g);
+	for(int i = 2; i<=g; i++)
+		if(g % i ==0)
+		//	begin
+		//	count = count+1;
+		//	end
+	//	if(count == 1)
+	  		return 2;
+	return g;
+endfunction
+
+function void post_randomize();
+	data = data.unique();
+endfunction
+endclass
+
+module seq;
+example ex;
+initial 
+begin
+	ex = new;
+	void'( ex.randomize);
+	foreach(ex.data[i])
+		$display("%0d",ex.data[i]);
+end
+endmodule 
+*/
+
+//--------------------------generate 0,1,x,z randomly----------------------------------------//
+
+/*class packet;
+	rand logic a;
+	rand logic b;
+	function void post_randomize();
+		b = $urandom_range(0,1);
+		if(b)
+			a = a? 'x : 'z;
+	endfunction
+endclass
+
+module example;
+initial begin
+		packet pkt = new;
+		repeat(10)
+		begin
+			pkt.randomize();
+			$display(pkt.a);
+		end
+end
+endmodule
+*/
+
+//--------------------------generate unique elements without using unique keyword----------------------------------//
+/*
+class packet;
+	rand bit[15:0] array[];
+	rand int b;
+
+constraint c1{array.size() inside {[4:20]};}
+//constraint c2{array.size == b ;}
+constraint c3{foreach (array[i])
+		array[i] inside {[0:64]};}
+constraint c4{foreach(array[i])
+		foreach(array[j])
+			if(i != j)
+				array[i] != array[j];}
+endclass
+
+module example;
+initial begin
+		packet pkt = new;
+		repeat(15)
+		begin
+			pkt.randomize();
+			$display("%0d",pkt.array.size());
+			$display("%0p", pkt.array);
+		end
+end
+endmodule
+*/
+
+//------------------------generate a random value for a var1[7:0] within 50 and var2[7:0] with the non_repeated value------------------------------//
+
+/*class packet;
+	rand bit[7:0] var1;
+	rand bit[7:0] var2;
+
+constraint c1{var1 inside {[0:50]};}
+constraint c2{unique {var2};}
+
+endclass
+
+module example;
+initial begin
+		packet pkt = new;
+		repeat(15)
+		begin
+			pkt.randomize();
+			$display("var1 = %0d",pkt.var1);
+			$display("var2 = %0d", pkt.var2);
+		end
+end
+endmodule
+*/
+
+//---------------------------access a single bit of 16bit variable---------------------------------------------//
+
+/*class packet;
+	rand bit[31:0] var1;
+	rand bit[31:0] var2;
+
+constraint c1{$onehot(var2) == 1; }
+
+endclass
+
+module example;
+initial begin
+		packet pkt = new;
+		repeat(15)
+		begin
+			pkt.randomize();
+			$display("var1 = %0d",pkt.var1);
+			$display("var2 = %0d", pkt.var2);
+		end
+end
+endmodule
+*/
+
+//------------------------------generate a variable with 0-31 bits should be 1,32-61 bits should be 0----------------------//
+/*class packet;
+	rand bit[61:0] var1;
+
+constraint c1{foreach(var1[i])
+		{
+		if(i >= 0 && i < 32)
+			var1[i] == 1'b1;
+		else if(i >= 32 && i < 61)	
+			var1[i] == 1'b0;}}
+
+function void post_randomize();
+	$display("%0b",var1);
+endfunction
+
+endclass
+
+module example;
+initial begin
+		packet pkt = new;
+		repeat(3)
+		begin
+			pkt.randomize();
+		end
+end
+endmodule
+*/
+
+//-----------------------------prime numbers between 1 to 100-------------------------------------//
+/*
+class prime;
+rand bit[7:0] a[$];
+ 
+constraint c1{a.size == 100;}
+constraint c2{foreach(a[i])
+                if(i>1)
+                      a[i] == prime(i);}
+                      
+function int prime(int n);
+    for(int i=2; i<n; i++)
+        if(n % i == 0)
+            return 2;
+              prime = n;
+endfunction
+        
+
+function void post_randomize();
+a = a.unique;
+	$display("%0p",a);
+endfunction
+
+endclass
+
+module example;
+initial begin
+		prime p = new;
+			p.randomize();
+  end
+endmodule
+*/
+//-----------------------------palindrome numbers-------------------------------------//
+
+class palindrome;
+rand int a[];
+rand int length;
+
+constraint c1{length inside {[1:32]};
+               a.size == length;}
+                
+constraint c2{foreach(a[i])
+                if(i<length/2)
+                      a[i] == a[length -1 -i];}    
+
+/*function void post_randomize();
+	$display("%0p",a);
+endfunction */
+
+endclass
+
+module example;
+initial begin
+		palindrome p = new;
+
+      repeat(5)
+      begin
+      			p.randomize();
+            	$display("%0p",p.a);
+      end
+  end
+endmodule
+

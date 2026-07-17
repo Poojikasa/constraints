@@ -1,0 +1,65 @@
+// Code your testbench here
+// or browse Examples
+
+Implement a SystemVerilog Stimulus Generator
+
+You are testing a Stimulus Generator that produces a dynamic queue based on a specific rule.
+
+The system contains:
+
+- A fixed-size integer array k of size 5.
+- A dynamic queue q that gets filled during randomization.
+
+Generate the contents of queue q according to the following rules.
+
+Requirements
+
+1. Declare a fixed-size array "k[5]" and a queue "q[$]".
+2. For each index "i" (0 to 4) in array "k", assign:
+   k[i] = i + 1
+   by calling a function "varr(int j)".
+3. The function "varr(int j)" should:
+   - Push the value "j" into queue "q" exactly j times.
+   - Return the value "j" so that it can be assigned to "k[i]".
+4. Use constraints so that the values of array "k" are generated through the function call.
+5. Before every randomization, clear the queue.
+6. After randomization is complete, display:
+   - The contents of array "k".
+   - The contents of queue "q".
+
+Expected Output
+
+Array "k":
+
+1 2 3 4 5
+
+Queue "q":
+
+1 2 2 3 3 3 4 4 4 4 5 5 5 5 5
+class stim_gen;
+  rand int k[5];
+  int q[$];
+  function int varr(int j);
+    repeat(j)
+      q.push_back(j);
+    return j;
+  endfunction
+  constraint c_k{foreach(k[i])
+    k[i]==varr(i+1);}
+                         function void pre_randomize();
+                           q.delete();
+ endfunction
+ endclass
+                         module tb();
+                           
+                           initial
+                             begin
+                               stim_gen ag;
+                           ag=new();
+                           assert(ag.randomize);
+                           $display("k=%p",ag.k);
+                           $display("q=%p",ag.q);
+                             end
+                         endmodule
+                           
+                           

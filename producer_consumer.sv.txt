@@ -1,0 +1,66 @@
+//1.You have two processes:Producer generates random 8-bit data.consumer reads data and checks if it is even or odd.Task (a) Write systemverilog code using a mailbox to implement producer-consumer communication.(b)Ensure the producer sends 10 random values and the consumer prints each value with its priority.
+module producer_consumer_tb();
+  mailbox #(bit[7:0])mbox;
+  task producer();
+    bit [7:0]data;
+    repeat(10)
+    begin
+    data=$urandom_range(0,255);
+    mbox.put(data);
+      $display("[%0t]producer is sending data is %0d",$time,data);
+              end
+              endtask
+              
+              task consumer();
+                bit [7:0]data;
+                repeat(10)
+                  begin
+                    mbox.get(data);
+                    if(data%2==0)
+                      $display("[%0t]consumer received data is even", $time,data);
+                    else
+                      $display("[%0t]consumer received data is odd", $time,data);
+                  end
+              endtask
+  initial
+    begin
+      mbox=new();
+      fork
+      producer();
+      consumer();
+      join
+      $finish;
+    end
+endmodule
+
+//2.You are working on a verification environment for a memory subsystem. The requirement is to generate a set of random addresses for testing. These addresses must satisfy the following.
+All addresses should be aligned to 16 bytes (to match the memory architecture). No two addresses should be the same (they must be unique). The addresses should be stored in an array for easy access during stimulus generation.
+
+Question: How would you write a systemVerilog class with constraint to meet the requirements? 
+
+Explain how your constraint ensures both alignment and uniqueness. (Bonus) If the address range is limited to 0x1000-OXFFFF, how Would you modify the constraint With respect to constraint inheritance?
+class addr_gen;
+  rand bit[31:0]array_addr[16];
+  constraint c1{foreach(array_addr[i])
+    array_addr[i]%16==0;}
+  constraint c2{unique{array_addr};}
+    endclass
+                class addr_array_gen extends addr_gen;
+                  constraint c3{foreach(array_addr[i])
+                    array_addr[i] inside{[32'h0000:32'hffff]};}
+                    endclass
+                    
+                    module tb();
+                      addr_array_gen ag;
+                      
+                      initial
+                        begin
+                          ag=new();
+                          assert(ag.randomize);
+                          $display("generated addr & aligned address");
+                          foreach(ag.array_addr[i])
+                            $display("addr[%0d]=0*%0h",i,ag.array_addr[i]);
+                        end
+                    endmodule
+                    
+      
