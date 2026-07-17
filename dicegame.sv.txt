@@ -1,0 +1,52 @@
+class dicegame;
+rand int dice[5][5];
+rand int total[5];
+int max_score;
+constraint c_dice{foreach 
+(dice[i,j])
+dice [i][j] inside {[1:6]};}
+function void calculate();
+max_score=0;
+foreach(dice[i])
+begin
+total[i]=0;
+foreach(dice[i][j])
+begin
+total[i]+=dice[i][j];
+end
+if(total[i]>max_score)
+max_score=total[i];
+end
+endfunction
+endclass
+//endmodule
+
+module dicegame_tb;
+dicegame dg;
+initial
+begin
+dg=new();
+assert(dg.randomize());
+foreach(dg.dice[i])
+begin
+$write("player %0d dice rolls : ",i+1);
+foreach(dg.dice[i][j])
+
+$write("%0d ",dg.dice[i][j]);
+$display(" ");
+end
+dg.calculate();
+
+foreach(dg.total[i])
+begin
+$display("player %0d total score= %0d", i+1, dg.total[i]);
+end
+
+//foreach(max_score)
+$display("\n winner score=%0d", dg.max_score);
+//end
+ $finish;
+end
+//end
+endmodule
+
