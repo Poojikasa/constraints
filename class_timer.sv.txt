@@ -1,0 +1,41 @@
+Define a class timer with the following requirements:
+
+Declare an array of 4 random integers start_time[4] representing the start times of 4 tasks.
+Declare an array of 4 random integers duration[4] representing the duration of each task.
+Each start_time must be between 0 and 100.
+Each duration must be between 10 and 50.
+The 4 tasks must not overlap in time.
+Write a testbench to:
+Create the timer object.
+Randomize it.
+Display the generated start_time and duration.
+
+Your task: Write the complete SystemVerilog code.
+
+class timer;
+  rand int start_times[4];
+  rand int duration[4];
+  constraint c_range{foreach(start_times[i])
+    start_times[i]inside{[0:100]};
+  foreach(duration[i])
+  duration[i]inside{[10:50]};}
+  constraint non_overlap{foreach(start_times[i])
+    foreach(start_times[j])
+      if(i<j)
+        (start_times[i]+duration[i]<=start_times[j]||
+         start_times[j]+duration[j]<=start_times[i]);}
+     endclass
+module tb();
+  timer t;
+  initial
+    begin
+      t=new();
+      if(t.randomize())
+        begin
+          $display("start_times=%p",t.start_times);
+          $display("duration=%p",t.duration);
+        end
+     // else
+      //  $display("Randomization failed");
+    end
+      endmodule
