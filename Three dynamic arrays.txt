@@ -1,0 +1,88 @@
+Q:There are three dynamic arrays .Array1 should be b/w 8 to 10.Array2 size should be b/w 6 to 10.Array3 size should be b/w max of arr1 and arr2.The elements of arr1 should be filled with inc num by 3.arr2 should be decremented b/w 2 to 5
+
+class arr_test;
+
+  rand int arr1[];
+  rand int arr2[];
+  int arr3[];
+
+  // Size constraints
+  constraint size_c {
+    arr1.size() inside {[8:10]};
+    arr2.size() inside {[6:10]};
+  }
+
+  function void post_randomize();
+
+    int max_size;
+
+    // Fill arr1
+    arr1[0] = 0;
+
+    foreach (arr1[i]) begin
+      if (i > 0)
+        arr1[i] = arr1[i-1] + 3;
+    end
+
+    // Fill arr2
+    arr2[0] = 100;
+
+    foreach (arr2[i]) begin
+      if (i > 0)
+        arr2[i] = arr2[i-1] - $urandom_range(2,5);
+    end
+
+    // Find maximum size
+    if (arr1.size() > arr2.size())
+      max_size = arr1.size();
+    else
+      max_size = arr2.size();
+
+    // Create arr3
+    arr3 = new[max_size];
+
+    // Fill arr3
+    foreach (arr3[i]) begin
+
+      if (i < arr1.size() && i < arr2.size())
+        arr3[i] = arr1[i] + arr2[i];
+
+      else if (i < arr1.size())
+        arr3[i] = arr1[i];
+
+      else
+        arr3[i] = arr2[i];
+
+    end
+
+  endfunction
+
+endclass
+
+
+module tb;
+
+  arr_test t;
+
+  initial begin
+
+    t = new();
+
+    if (t.randomize()) begin
+
+      $display("arr1.size = %0d", t.arr1.size());
+      $display("arr2.size = %0d", t.arr2.size());
+      $display("arr3.size = %0d", t.arr3.size());
+
+      $display("arr1 = %p", t.arr1);
+      $display("arr2 = %p", t.arr2);
+      $display("arr3 = %p", t.arr3);
+
+    end
+    else begin
+      $display("Randomization failed");
+    end
+
+  end
+
+endmodule

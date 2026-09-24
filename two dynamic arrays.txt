@@ -1,0 +1,60 @@
+// Code your testbench here
+// or browse Examples
+Create a SystemVerilog class containing three dynamic arrays arrA, arrB, and arrC.
+
+Requirements:
+
+arrA and arrB should have a random size between 5 and 10.
+The sizes of arrA and arrB should not be equal.
+All elements of arrA should be unique.
+All elements of arrB should be unique.
+arrC should have a size equal to the smaller size of arrA and arrB.
+Each element of arrC should be the multiplication of the corresponding elements of arrA and arrB:
+
+class test;
+  rand int arrA[];
+  rand int arrB[];
+  rand int unsigned arrC[];
+  //int max_size;
+  constraint A{arrA.size() inside {[5:10]};
+              foreach (arrA[i])
+                arrA[i]>0;
+              }
+  constraint B{arrB.size() inside {[5:10]};
+      foreach(arrB[i])
+        arrB[i]>0;
+              }
+  constraint not_same {arrA.size() != arrB.size();}
+  constraint a1{unique{arrA};}
+  constraint a2{unique{arrB};}
+  function void post_randomize();
+    int max_size;
+ // constraint arrC_size{foreach(arrC[i])
+    max_size = (arrA.size() < arrB.size()) ? arrA.size() :arrB.size();
+    arrC =new[max_size];
+    foreach(arrC[i])
+                    arrC[i]=arrA[i]*arrB[i];
+                       endfunction
+                  endclass
+                  
+                  module tb();
+                    test t;
+                    initial
+                      begin
+                        t=new();
+                        if(t.randomize())
+                          begin
+                            $display("arrA.size=%d",t.arrA.size);
+                            $display("arrB.size=%d",t.arrB.size);
+                            $display("arrC.size=%d",t.arrC.size);
+                            $display("arrA=%p",t.arrA);
+                            $display("arrB=%p",t.arrB);
+                            $display("arrC=%p",t.arrC);
+                          end
+                      end
+                  endmodule
+                            
+                            
+  
+              
+              
