@@ -1,0 +1,59 @@
+Define a class frame_gen with:
+rand bit [7:0] data[]
+rand int frame_size (range 10–40)
+Requirements:
+data.size() == frame_size
+All values must be unique.
+Every value should be even.
+At least 30% of elements should be greater than 100.
+Sum of all elements = 1000.
+Write all required constraints and any post_randomize() code if needed.
+
+
+                              // Code your testbench here
+// or browse Examples
+class frame_gen;
+  rand bit [7:0]data[];
+  rand int frame_size;
+  constraint c{frame_size inside {[10:40]};
+               data.size()==frame_size;}
+  constraint d{unique{data};}
+  constraint e{foreach(data[i])
+    data[i]%2==0;}
+  constraint c_sum{data.sum() with(int'(item)) == 1000;}
+                   function void post_randomize();
+                     int cnt=0;
+                     foreach(data[i])
+                       if(data[i]>100)
+                       cnt++;
+                       if(cnt >= (frame_size*30+99)/100)
+                         $display("pass");
+                   endfunction
+                   endclass
+                   module tb();
+                     frame_gen fg;
+                     initial
+                       begin
+                         fg=new();
+                           if(fg.randomize())
+                             begin
+                               $display("frame_size=%d",fg.frame_size);
+                               $display("data.size=%d",fg.data.size());
+                           $display("data=%p",fg.data);
+                               $display("data.sum=%d",fg.data.sum() with(int'(item)));
+                         end
+                         else
+                           $display("fail");
+                       end
+                   endmodule
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+  

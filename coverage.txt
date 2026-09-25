@@ -1,0 +1,42 @@
+// Code your testbench here
+// or browse Examples
+How to apply option.at_least only to a particular bin in a coverpoint.
+
+a) Create a property “A” with rand keyword.
+
+b) Create two bins for property “A” whose bins has to be hit for one time.
+
+c) Create ten bins for property “A” whose bins has to be hit for 10 times.
+module tb();
+  class cov_class;
+    rand int A;
+    constraint ca{A inside {[0:11]};}
+    covergroup cg;
+      D:coverpoint A{
+      option.at_least=1;
+        bins A[]= {[0:1]};}
+      B:coverpoint A{
+      option.at_least=10;
+        bins A[]= {[2:11]};}
+    endgroup
+    function new();
+      cg=new();
+    endfunction
+  endclass
+  //module tb();
+    cov_class c;
+    initial
+      begin
+        c=new();
+        repeat(200)
+        begin
+          if(c.randomize())
+            begin
+              c.randomize();
+              c.cg.sample();
+            end
+          $display("coverage=%0.2f",c.cg.get_coverage());
+            end
+             end
+     // end
+             endmodule
