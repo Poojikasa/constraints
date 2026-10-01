@@ -1,0 +1,44 @@
+// Code your testbench here
+// or browse Examples
+You are designing a verification environment for a packet-based protocol. Each packet contains two fields:
+
+addr (8-bit address)
+data (4-bit payload)
+
+The requirements are:
+
+Randomize these fields using a struct inside a class.
+Apply constraints so that:
+addr is between 0x10 and 0xF0.
+data is between 0x1 and 0xE.
+Generate multiple packets and ensure all addresses are unique.
+How would you implement this in SystemVerilog using a typedef struct and constraints inside a class?
+Explain why this approach is better than using separate variables for each field. How would you extend this to randomize an array of packets with unique addresses?
+
+
+module  packet_randomization;
+  typedef struct {
+    rand bit[7:0]addr;
+    rand bit[3:0]data;}packet_t;
+  class packet;
+    rand  packet_t pkt_arr[10];
+    constraint c1{foreach(pkt_arr[i]){
+      pkt_arr[i].addr inside {[8'h10:8'hF0]};
+      pkt_arr[i].data inside {[4'h1:4'hE]};}}
+    constraint c2{foreach(pkt_arr[i])
+      foreach(pkt_arr[j])
+        if(i!=j)
+          pkt_arr[i].addr !=pkt_arr[j].addr;
+                 }
+  endclass
+  initial
+    begin
+      packet p;
+      p=new();
+      assert(p.randomize());
+      foreach(p.pkt_arr[i])
+        $display("addr=%0h,data=%0h",p.pkt_arr[i].addr,p.pkt_arr[i].data);
+    end
+  endmodule
+      
+  

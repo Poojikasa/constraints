@@ -1,0 +1,57 @@
+// Code your testbench here
+// or browse Examples
+
+You are designing a memory mapping system where each address corresponds to a configuration value. The system has the following rules:
+
+The array represents memory addresses.
+The 0th and 1st elements can be initialized to any value.
+Starting from the 2nd index, each subsequent value must be incremented by 1 from the previous.
+All values must be stored at odd-numbered addresses (i.e., index positions 1, 3, 5, ...).
+Task:
+
+Model this behavior using SystemVerilog constraints and verify the correctness of the generated array.
+
+Questions:
+How would you define constraints to allow arbitrary values for the first two elements and enforce incrementing values from the third element onward?
+How can you ensure that values are only stored at odd-numbered indices in the array?
+Write a SystemVerilog class that models this behavior and generates a valid array.
+How would you test and verify that the array meets all the specified conditions during simulation?
+
+class mem_map;
+  rand bit[7:0]arr[15];
+  constraint a{foreach(arr[i])
+    if(i%2==0)
+      arr[i]==0;
+              }
+  constraint b{foreach(arr[i])
+    if(i>=5 && (i%2==1))
+      arr[i]==arr[i-2]+2;
+              }
+endclass
+module tb();
+    mem_map mm;
+    initial
+      begin
+        mm=new();
+        assert(mm.randomize());
+        begin
+          $display("Gen array");
+          foreach(mm.arr[i])
+            $display("array[%0d]=%0d",i,mm.arr[i]);
+          foreach(mm.arr[i])
+            begin
+            if(i%2==0)
+              begin
+                assert(mm.arr[i]==0);
+              end
+              //foreach(mm.arr[i])
+               // begin
+                  if(i>=5 && i%2==1)
+                    begin
+                      assert(mm.arr[i]==mm.arr[i-2]+2);
+                                  end
+                                  end
+                                  end
+      end
+                                  endmodule
+                    
