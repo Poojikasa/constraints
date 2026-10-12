@@ -1,0 +1,46 @@
+//parameterized class that a generates a random array with even length ,where the first half in ascending order second in descending order.Add a method that verifies this condition 
+
+class array_gen #(parameter N=8);
+  rand int arr[];
+  function new();
+    arr=new[N];
+  endfunction
+  constraint c{foreach(arr[i])
+    arr[i] inside {[1:100]};}
+  constraint c_first{foreach(arr[i])
+    if(i>0 && i<N/2)
+      arr[i]>arr[i-1];
+                    }
+  constraint c_second{foreach(arr[i])
+    if(i>N/2)
+      arr[i]<arr[i-1];
+                     }
+  function void verify();
+    bit flag=1;
+    for(int i=1;i<N/2;i++)
+      if( arr[i]<arr[i-1])
+    flag=0;
+    for(int i=1;i>N;i++)
+      if( arr[i]>arr[i-1])
+    flag=0;
+    if(flag)
+      $display("success");
+    else
+      $display("fail");
+  endfunction
+endclass
+module tb();
+  array_gen #(8)ag;
+  initial
+    begin
+      ag=new();
+      assert(ag.randomize());
+      foreach(ag.arr[i])
+        $write("%0d ",ag.arr[i]);
+      $display(" ");
+      ag.verify();
+    end
+endmodule
+      
+    
+  
